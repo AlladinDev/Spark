@@ -1,22 +1,26 @@
+// Package spark provides the main application structure and setup for the Spark framework.
 package spark
 
 import (
-	DIPackage "github.com/AlladinDev/Spark/Internals/Di"
+	"net/http"
+
+	DIPackage "github.com/AlladinDev/Spark/internals/Di"
+	RouterPkg "github.com/AlladinDev/Spark/internals/Router"
 	"github.com/redis/go-redis/v9"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type App struct {
-	DI *DIPackage.DI
-
+	DI          *DIPackage.Package
+	Router      *http.ServeMux
 	MongoClient *mongo.Client
 	Redis       *redis.Client
 }
 
 func NewApp() *App {
 	return &App{
-		DI: NewApp().DI,
-		// Router: NewApp().Router,
+		DI:     DIPackage.NewDI(),
+		Router: RouterPkg.NewRouter(),
 	}
 }
 
@@ -31,6 +35,6 @@ func (a *App) WithRedis(redisClient *redis.Client) *App {
 }
 
 func (a *App) Run(addr string) error {
-	//return http.ListenAndServe(addr, a.Router.Mux)
-	return nil
+	return http.ListenAndServe(addr, a.Router)
+
 }
