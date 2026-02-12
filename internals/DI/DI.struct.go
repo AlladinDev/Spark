@@ -1,5 +1,5 @@
-// Package structs provides struct definitions for dependency injection and module management.
-package structs
+// Package di provides struct definitions for dependency injection and module management.
+package di
 
 import "reflect"
 
